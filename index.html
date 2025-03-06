@@ -222,7 +222,7 @@
             gap: 30px;
         }
 
-        #email-btn, #instagram-btn {
+        #email-btn, #instagram-btn, #linkedin-btn {
             padding: 1rem 2rem;
             border-radius: 5px;
             text-decoration: none;
@@ -242,6 +242,20 @@
         #instagram-btn {
             background: #E1306C;
             color: white;
+        }
+
+        #linkedin-btn {
+        background: #0A66C2;  /* LinkedIn brand color */
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 5px;
+        text-decoration: none;
+        opacity: 0;
+        transition: opacity 0.5s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
         }
 
         .modal-overlay {
@@ -311,17 +325,21 @@
             <div class="projects-container"></div>
         </section>
 
-        <section id="contact" class="full-screen black-bg">
-            <div id="contact-text" class="typing-text"></div>
-            <div style="display: flex; flex-direction: column; gap: 25px; margin-top: 2rem;">
-                <a href="mailto:iamullas28@gmail.com" id="email-btn" class="hidden">
-                    <i class="fas fa-envelope"></i> Contact via Email
-                </a>
-                <a href="https://instagram.com/iamullas_" id="instagram-btn" class="hidden" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-instagram"></i> Connect on Instagram
-                </a>
-            </div>
-        </section>
+<section id="contact" class="full-screen black-bg">
+    <div id="contact-text" class="typing-text"></div>
+    <div style="display: flex; flex-direction: column; gap: 25px; margin-top: 2rem;">
+        <a href="mailto:iamullas28@gmail.com" id="email-btn" class="hidden">
+            <i class="fas fa-envelope"></i> Contact via Email
+        </a>
+        <a href="https://instagram.com/iamullas_" id="instagram-btn" class="hidden" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i> Connect on Instagram
+        </a>
+        <!-- Add LinkedIn Button Here -->
+        <a href="https://www.linkedin.com/in/ullas-n-3aba25354" id="linkedin-btn" class="hidden" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-linkedin"></i> Connect on LinkedIn
+        </a>
+    </div>
+</section>
     </div>
 
     <div id="modal-overlay" class="modal-overlay"></div>
@@ -511,6 +529,7 @@ Python • Pandas • SQL • APIs • Web Scraping`
             await typeText(texts.contact, '#contact-text');
             document.getElementById('email-btn').style.opacity = '1';
             document.getElementById('instagram-btn').style.opacity = '1';
+            document.getElementById('linkedin-btn').style.opacity = '1';
             document.querySelector('.floating-hire-btn').classList.add('visible');
 
             enableNaturalScroll();
