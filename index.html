@@ -376,12 +376,14 @@
     </div>
 
     <script>
-	document.addEventListener("DOMContentLoaded", function () {
+	window.addEventListener("load", function () {
     		setTimeout(function () {
         		let video = document.getElementById("myVideo");
-        		video.play().catch(error => console.log("Autoplay blocked:", error));
-    		}, 5000); // 5-second delay
-	});
+        		if (video) {
+            			video.muted = true; // Ensures autoplay works
+            			video.play().catch(error => console.error("Autoplay blocked:", error));
+        		}
+    		}, 5000); // Delay AFTER the loader finishes
 	});
         const texts = {
             opening: [
