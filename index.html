@@ -376,6 +376,11 @@
     </div>
 
     <script>
+	window.onload = function() {
+            setTimeout(function() {
+                document.getElementById("myVideo").play();
+            }, 5000); // Delay of 5 seconds
+        };
         const texts = {
             opening: [
                 "Looking for Automation Solutions?",
