@@ -378,9 +378,9 @@
     <script>
 	document.addEventListener("DOMContentLoaded", function () {
     		setTimeout(function () {
-        		const videoPlayer = document.getElementById("ytPlayer");
-        		videoPlayer.src += "&autoplay=1"; // Add autoplay after 5 seconds
-    		}, 6500); // 5000ms = 5 seconds
+        		let video = document.getElementById("myVideo");
+        		video.play().catch(error => console.log("Autoplay blocked:", error));
+    		}, 6500); // Delay of 5 seconds
 	});
         const texts = {
             opening: [
