@@ -376,11 +376,12 @@
     </div>
 
     <script>
-	window.onload = function() {
-            setTimeout(function() {
-                document.getElementById("myVideo").play();
-            }, 5000); // Delay of 5 seconds
-        };
+	document.addEventListener("DOMContentLoaded", function () {
+    		setTimeout(function () {
+        		const videoPlayer = document.getElementById("ytPlayer");
+        		videoPlayer.src += "&autoplay=1"; // Add autoplay after 5 seconds
+    		}, 5000); // 5000ms = 5 seconds
+	});
         const texts = {
             opening: [
                 "Looking for Automation Solutions?",
