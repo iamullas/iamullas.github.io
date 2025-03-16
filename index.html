@@ -19,18 +19,21 @@
             overflow: hidden;
             font-family: 'Courier New', monospace;
             transition: background-color 0.5s, color 0.5s;
+            scroll-snap-type: y mandatory;
         }
 
         body.final-black {
             background: #000;
             color: #fff;
-            transition: all 0.5s ease;
         }
 
         body.final-white {
             background: #fff;
             color: #000;
-            transition: all 0.5s ease;
+        }
+
+        .black-bg, .white-bg {
+            transition: background-color 0.5s ease;
         }
 
         #loading-overlay {
@@ -84,6 +87,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            overflow: hidden;
         }
 
         .black-bg {
@@ -117,12 +123,18 @@
             50% { opacity: 0; }
         }
 
-        .overview-text {
-            font-size: 1.2rem;
-            max-width: 800px;
+        .video-holder {
+            width: 60%;
+            max-width: 400px;
             margin: 2rem auto;
-            line-height: 1.6;
-            white-space: pre-wrap;
+            aspect-ratio: 9/16;
+        }
+
+        .video-holder video {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: cover;
         }
 
         #projects {
@@ -245,17 +257,17 @@
         }
 
         #linkedin-btn {
-        background: #0A66C2;  /* LinkedIn brand color */
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 5px;
-        text-decoration: none;
-        opacity: 0;
-        transition: opacity 0.5s;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 10px 0;
+            background: #0A66C2;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
         }
 
         .modal-overlay {
@@ -294,6 +306,11 @@
                 padding: 12px 25px;
                 font-size: 0.9rem;
             }
+
+            .video-holder {
+                width: 90%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -316,8 +333,12 @@
         </section>
 
         <section id="overview" class="full-screen black-bg">
-            <div id="overview-heading" class="typing-text"></div>
-            <div id="overview-content" class="typing-text overview-text"></div>
+            <div class="video-holder">
+               <video width="560" height="315" controls autoplay>
+    		<source src="introduction-video.mp4" type="video/mp4">
+    		Your browser does not support the video tag.
+	</video>
+            </div>
         </section>
 
         <section id="projects" class="white-bg">
@@ -325,21 +346,20 @@
             <div class="projects-container"></div>
         </section>
 
-<section id="contact" class="full-screen black-bg">
-    <div id="contact-text" class="typing-text"></div>
-    <div style="display: flex; flex-direction: column; gap: 25px; margin-top: 2rem;">
-        <a href="mailto:iamullas28@gmail.com" id="email-btn" class="hidden">
-            <i class="fas fa-envelope"></i> Contact via Email
-        </a>
-        <a href="https://www.instagram.com/workwithullas/" id="instagram-btn" class="hidden" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-instagram"></i> Connect on Instagram
-        </a>
-        <!-- Add LinkedIn Button Here -->
-        <a href="https://www.linkedin.com/in/ullas-n-3aba25354" id="linkedin-btn" class="hidden" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-linkedin"></i> Connect on LinkedIn
-        </a>
-    </div>
-</section>
+        <section id="contact" class="full-screen black-bg">
+            <div id="contact-text" class="typing-text"></div>
+            <div style="display: flex; flex-direction: column; gap: 25px; margin-top: 2rem;">
+                <a href="mailto:iamullas@workwithullas.com" id="email-btn" class="hidden">
+                    <i class="fas fa-envelope"></i> Contact via Email
+                </a>
+                <a href="https://www.instagram.com/workwithullas/" id="instagram-btn" class="hidden" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-instagram"></i> Connect on Instagram
+                </a>
+                <a href="https://www.linkedin.com/in/ullas-n-3aba25354" id="linkedin-btn" class="hidden" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin"></i> Connect on LinkedIn
+                </a>
+            </div>
+        </section>
     </div>
 
     <div id="modal-overlay" class="modal-overlay"></div>
@@ -361,19 +381,6 @@
                 "Looking for Automation Solutions?",
                 "Welcome to WorkwithUllas.com"
             ],
-            overview: {
-                heading: "Hey, I'm Ullas",
-                content: `Specializing in workflow automation systems that streamline operations.
-
-Core Services:
-✓ Custom process automation
-✓ Data pipeline development
-✓ Legacy system integration
-✓ Operational optimization
-
-Technologies:
-Python • Pandas • SQL • APIs • Web Scraping`
-            },
             projects: "Featured Projects",
             contact: "Start Your Automation Journey",
             projectsData: [
@@ -425,7 +432,7 @@ Python • Pandas • SQL • APIs • Web Scraping`
         const timing = {
             initialLoad: 2000,
             typeDelay: 40,
-            readDelay: 5000,
+            readDelay: 2000,
             scrollDuration: 1000
         };
 
@@ -441,11 +448,20 @@ Python • Pandas • SQL • APIs • Web Scraping`
 
         async function scrollToSection(index) {
             return new Promise(resolve => {
+                const offset = window.innerHeight * index;
                 window.scrollTo({
-                    top: window.innerHeight * index,
+                    top: offset,
                     behavior: 'smooth'
                 });
-                setTimeout(resolve, timing.scrollDuration);
+
+                const checkPosition = () => {
+                    if (Math.abs(window.pageYOffset - offset) < 1) {
+                        resolve();
+                    } else {
+                        requestAnimationFrame(checkPosition);
+                    }
+                };
+                requestAnimationFrame(checkPosition);
             });
         }
 
@@ -501,13 +517,13 @@ Python • Pandas • SQL • APIs • Web Scraping`
             const lastSection = document.getElementById('contact');
             const isBlack = lastSection.classList.contains('black-bg');
 
-            // Remove section backgrounds
-            document.querySelectorAll('[class*="-bg"]').forEach(section => {
-                section.classList.remove('black-bg', 'white-bg');
-            });
-
-            // Apply final background
             document.body.className = isBlack ? 'final-black' : 'final-white';
+
+            setTimeout(() => {
+                document.querySelectorAll('[class*="-bg"]').forEach(section => {
+                    section.classList.remove('black-bg', 'white-bg');
+                });
+            }, 500);
         }
 
         async function init() {
@@ -523,9 +539,7 @@ Python • Pandas • SQL • APIs • Web Scraping`
             await new Promise(r => setTimeout(r, timing.readDelay));
 
             await scrollToSection(2);
-            await typeText(texts.overview.heading, '#overview-heading');
-            await typeText(texts.overview.content, '#overview-content');
-            await new Promise(r => setTimeout(r, timing.readDelay));
+            await new Promise(r => setTimeout(r, 10000));
 
             await scrollToSection(3);
             await typeText(texts.projects, '#projects-heading');
